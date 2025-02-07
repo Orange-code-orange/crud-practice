@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import useCrudApi from './hooks/useCrudApi';
+import UserCard from './components/UserCard';
 
 const initialValues = {
 	first_name: '',
@@ -13,7 +14,7 @@ const initialValues = {
 const baseUrl = 'https://users-crud-api-production-9c59.up.railway.app/api/v1/';
 
 function App() {
-	const { data: users, request } = useCrudApi();
+	const { data: users, request, pending, error } = useCrudApi();
 	const [values, setValues] = useState(initialValues);
 
 	useEffect(() => {
@@ -44,6 +45,15 @@ function App() {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		add(values);
+	};
+
+	const remove = (id) => {
+		console.log('Remove:', id);
+		request({
+			url: baseUrl + `users/${id}`,
+			method: 'DELETE',
+			id,
+		});
 	};
 
 	return (
@@ -162,17 +172,30 @@ function App() {
 					</div>
 				</div>
 				<div className="mt-10">
-					<button
-						type="submit"
-						className="block w-full rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-					>
+					<button type="submit" className="btn">
 						Create
 					</button>
 				</div>
 			</form>
 
-			<h2>App</h2>
-			{users && <pre>{JSON.stringify(users, null, 2)}</pre>}
+			{pending ? (
+				<p>Loading...</p>
+			) : (
+				<ul>
+					{users.length > 0 ? (
+						users.map((user) => (
+							<UserCard
+								user={user}
+								key={user.id}
+								id={user.id}
+								remove={remove}
+							/>
+						))
+					) : (
+						<p className="">No users found</p>
+					)}
+				</ul>
+			)}
 		</div>
 	);
 }
