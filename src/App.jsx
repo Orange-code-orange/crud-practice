@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import useCrudApi from './hooks/useCrudApi';
-import UserCard from './components/UserCard';
+import UserForm from './components/UserForm';
+import Hero from './components/Hero';
+import Dashboard from './components/Dashboard';
 
 const initialValues = {
 	first_name: '',
@@ -16,12 +18,18 @@ const baseUrl = 'https://users-crud-api-production-9c59.up.railway.app/api/v1/';
 function App() {
 	const { data: users, request, pending, error } = useCrudApi();
 	const [values, setValues] = useState(initialValues);
+	const [edit, setEdit] = useState(null);
+	const [showHero, setShowHero] = useState(true);
+	const [showCreateUser, setShowCreateUser] = useState(false);
+	const [showDashboard, setShowDashboard] = useState(false);
+	const [fullScreenForm, setFullScreenForm] = useState(false);
 
 	useEffect(() => {
 		request({
 			url: baseUrl + 'users',
 		});
 	}, []);
+
 	useEffect(() => {
 		console.log('Users:', users);
 	}, [users]);
@@ -34,19 +42,6 @@ function App() {
 		});
 	};
 
-	const handleChange = (e) => {
-		const { name, value } = e.target;
-		setValues({
-			...values,
-			[name]: value,
-		});
-	};
-
-	const handleSubmit = (e) => {
-		e.preventDefault();
-		add(values);
-	};
-
 	const remove = (id) => {
 		console.log('Remove:', id);
 		request({
@@ -56,145 +51,122 @@ function App() {
 		});
 	};
 
-	return (
-		<div className="isolate bg-white px-6 py-24 sm:py-32 lg:px-8">
-			<div
-				aria-hidden="true"
-				className="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]"
-			>
-				<div
-					style={{
-						clipPath:
-							'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
-					}}
-					className="relative left-1/2 -z-10 aspect-1155/678 w-[36.125rem] max-w-none -translate-x-1/2 rotate-[30deg] bg-linear-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-40rem)] sm:w-[72.1875rem]"
-				/>
-			</div>
-			<div className="mx-auto max-w-2xl text-center">
-				<h2 className="text-4xl font-semibold tracking-tight text-balance text-gray-900 sm:text-5xl">
-					Create New User
-				</h2>
-				<p className="mt-2 text-lg/8 text-gray-600">
-					Aute magna irure deserunt veniam aliqua magna enim voluptate.
-				</p>
-			</div>
-			<form onSubmit={handleSubmit} className="mx-auto mt-16 max-w-xl sm:mt-20">
-				<div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
-					<div>
-						<label className="block text-sm/6 font-semibold text-gray-900">
-							First name
-						</label>
-						<div className="mt-2.5">
-							<input
-								value={values.first_name}
-								onChange={handleChange}
-								name="first_name"
-								type="text"
-								autoComplete="given-name"
-								className="block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
-							/>
-						</div>
-					</div>
-					<div>
-						<label className="block text-sm/6 font-semibold text-gray-900">
-							Last name
-						</label>
-						<div className="mt-2.5">
-							<input
-								value={values.last_name}
-								onChange={handleChange}
-								name="last_name"
-								type="text"
-								autoComplete="family-name"
-								className="block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
-							/>
-						</div>
-					</div>
-					<div className="sm:col-span-2">
-						<label className="block text-sm/6 font-semibold text-gray-900">
-							Email
-						</label>
-						<div className="mt-2.5">
-							<input
-								value={values.email}
-								onChange={handleChange}
-								name="email"
-								type="email"
-								autoComplete="email"
-								className="block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
-							/>
-						</div>
-					</div>
-					<div className="sm:col-span-2">
-						<label className="block text-sm/6 font-semibold text-gray-900">
-							Password
-						</label>
-						<div className="mt-2.5">
-							<input
-								value={values.password}
-								onChange={handleChange}
-								name="password"
-								type="password"
-								autoComplete="current-password"
-								className="block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
-							/>
-						</div>
-					</div>
-					<div className="sm:col-span-2">
-						<label className="block text-sm/6 font-semibold text-gray-900">
-							Birthday
-						</label>
-						<div className="mt-2.5">
-							<input
-								value={values.birthday}
-								onChange={handleChange}
-								name="birthday"
-								type="date"
-								autoComplete="bday"
-								className="block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
-							/>
-						</div>
-					</div>
-					<div className="sm:col-span-2">
-						<label className="block text-sm/6 font-semibold text-gray-900">
-							Image URL
-						</label>
-						<div className="mt-2.5">
-							<input
-								value={values.image_url}
-								onChange={handleChange}
-								name="image_url"
-								type="text"
-								autoComplete="url"
-								className="block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
-							/>
-						</div>
-					</div>
-				</div>
-				<div className="mt-10">
-					<button type="submit" className="btn">
-						Create
-					</button>
-				</div>
-			</form>
+	const handleChange = (e) => {
+		const { name, value } = e.target;
+		setValues({
+			...values,
+			[name]: value,
+		});
+	};
 
-			{pending ? (
-				<p>Loading...</p>
+	const update = (id, userEdit) => {
+		request({
+			url: baseUrl + `users/${id}`,
+			method: 'PUT',
+			body: userEdit,
+		});
+	};
+
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		if (edit) {
+			update(edit.id, values);
+			setEdit(null);
+		} else {
+			add(values);
+		}
+
+		goToDashboard();
+		setValues(initialValues);
+	};
+
+	const handleEdit = (user) => {
+		console.log(user.id);
+		setEdit(user);
+		setValues(user);
+	};
+
+	const handleCancel = () => {
+		setEdit(null);
+		setValues(initialValues);
+	};
+
+	const goToCreateUser = () => {
+		setShowHero(false);
+		setShowCreateUser(true);
+		setShowDashboard(false); // Asegúrate de desactivar 'showDashboard'
+		setFullScreenForm(true);
+	};
+
+	const goToCreateUserFromDashboard = () => {
+		setShowDashboard(false);
+		setShowCreateUser(true);
+		setShowHero(false); // Desactiva 'showHero' si es necesario
+		setFullScreenForm(false);
+	};
+
+	const goToDashboard = () => {
+		setShowHero(false);
+		setShowCreateUser(false); // Desactiva 'showCreateUser'
+		setShowDashboard(true);
+		setEdit(null);
+	};
+
+	const goToHome = () => {
+		setShowHero(true);
+		setShowCreateUser(false);
+		setShowDashboard(false);
+	};
+
+	return (
+		<div
+			className="isolate bg-white w-screen h-auto overflow-hidden"
+			style={{ overflowX: 'hidden' }}
+		>
+			{showHero ? (
+				<Hero goToCreateUser={goToCreateUser} goToDashboard={goToDashboard} />
+			) : showCreateUser ? (
+				<div className="w-screen h-screen overflow-y-auto overflow-x-hidden">
+					<nav
+						aria-label="Global"
+						className="w-full mx-auto flex items-center justify-between py-4 lg:px-8 h-15 bg-gray-900 bg-o rounded-3xl drop-shadow-xl opacity-80"
+					>
+						<div className="flex flex-1 justify-center">
+							<button
+								onClick={goToHome}
+								className="text-lg font-semibold text-white cursor-pointer"
+							>
+								Inicio
+							</button>
+						</div>
+						<div className="flex justify-end mr-4"></div>
+					</nav>
+					<UserForm
+						values={values}
+						handleChange={handleChange}
+						handleSubmit={handleSubmit}
+						edit={edit}
+						handleCancel={handleCancel}
+						fullScreen={fullScreenForm}
+						showCreateUser={showCreateUser}
+					/>
+				</div>
+			) : showDashboard ? (
+				<Dashboard
+					users={users}
+					pending={pending}
+					remove={remove}
+					handleEdit={handleEdit}
+					goToCreateUser={goToCreateUserFromDashboard}
+					goToHome={goToHome}
+					values={values}
+					handleChange={handleChange}
+					handleSubmit={handleSubmit}
+					edit={edit}
+					handleCancel={handleCancel}
+				/>
 			) : (
-				<ul>
-					{users.length > 0 ? (
-						users.map((user) => (
-							<UserCard
-								user={user}
-								key={user.id}
-								id={user.id}
-								remove={remove}
-							/>
-						))
-					) : (
-						<p className="">No users found</p>
-					)}
-				</ul>
+				<p>No content to display</p>
 			)}
 		</div>
 	);
