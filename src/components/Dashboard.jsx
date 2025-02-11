@@ -72,18 +72,18 @@ function Dashboard({
 				aria-label="Global"
 				className="w-full mx-auto flex items-center justify-between py-4 lg:px-8 h-15 bg-gray-900 bg-o rounded-3xl drop-shadow-xl opacity-80"
 			>
-				<div className="flex flex-1 justify-start ml-30">
+				<div className="flex flex-1 justify-start ml-4 lg:ml-30">
 					<button
 						onClick={handleGoHomeClick}
-						className="text-lg font-bold text-gray-100 cursor-pointer"
+						className="text-cl font-bold text-gray-100 cursor-pointer"
 					>
 						Inicio
 					</button>
 				</div>
-				<div className="flex justify-end mr-30">
+				<div className="flex justify-end mr-4 lg:mr-30">
 					<button
 						onClick={handleCreateEditButton}
-						className="text-lg font-semibold text-white cursor-pointer flex items-center gap-2"
+						className="text-m font-semibold text-white cursor-pointer flex items-center gap-2"
 					>
 						<div className="flex justify-center items-center">
 							{creatingNewUser || isEditing
@@ -95,7 +95,7 @@ function Dashboard({
 							{creatingNewUser || isEditing ? (
 								<box-icon name="x" color="white" size="md"></box-icon>
 							) : (
-								<box-icon name="user-plus" color="white" size="md"></box-icon>
+								<box-icon name="user-plus" color="white" size="sm"></box-icon>
 							)}
 						</div>
 					</button>

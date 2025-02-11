@@ -11,19 +11,22 @@ function UserList({ users, remove, pending, handleEdit, singleColumn }) {
 	return (
 		<>
 			{pending ? (
-				<p>Loading...</p>
+				<p className="font-bold text-5xl self-center">Loading...</p>
 			) : (
 				<ul className={gridClass}>
 					{users.length > 0 ? (
-						users.map((user) => (
-							<UserCard
-								user={user}
-								key={user.id}
-								id={user.id}
-								remove={remove}
-								handleEdit={handleEdit}
-							/>
-						))
+						users
+							.slice()
+							.reverse()
+							.map((user) => (
+								<UserCard
+									user={user}
+									key={user.id}
+									id={user.id}
+									remove={remove}
+									handleEdit={handleEdit}
+								/>
+							))
 					) : (
 						<li className="list-none text-center">No users found</li>
 					)}

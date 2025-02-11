@@ -73,9 +73,7 @@ function UserForm({
 						? 'Edita un usuario'
 						: ''}
 				</h2>
-				<p className="mt-2 text-lg/8 text-gray-600">
-					Aute magna irure deserunt veniam aliqua magna enim voluptate.
-				</p>
+				{/* <p className="mt-2 text-lg/8 text-gray-600">Academlo</p> */}
 			</div>
 			<form
 				onSubmit={validateAndSubmit}
