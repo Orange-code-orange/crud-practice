@@ -77,7 +77,6 @@ function App() {
 	};
 
 	const handleEdit = (user) => {
-		console.log(user.id);
 		setEdit(user);
 		setValues(user);
 	};
