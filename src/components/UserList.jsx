@@ -6,8 +6,6 @@ function UserList({ users, remove, pending, handleEdit, singleColumn }) {
 		? 'grid grid-cols-1 gap-4 w-[90%] mx-auto place-items-center'
 		: 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-[90%] mx-auto place-items-center';
 
-	console.log(singleColumn);
-
 	return (
 		<>
 			{pending ? (
