@@ -30,10 +30,6 @@ function App() {
 		});
 	}, []);
 
-	useEffect(() => {
-		console.log('Users:', users);
-	}, [users]);
-
 	const add = (user) => {
 		request({
 			url: baseUrl + 'users',
